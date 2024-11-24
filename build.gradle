@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+
+}
+jacoco {
+    toolVersion = "0.8.10" // Latest JaCoCo version
+}
+
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.test {
+    useJUnitPlatform() // Ensure JUnit 5 or compatible test platform
+}
+
+jacocoTestReport {
+    dependsOn test // Ensure tests run before generating the report
+    reports {
+        xml.required.set(true)  // Enable XML report for CI/CD
+        html.required.set(true) // Enable HTML report for local inspection
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test // Perform coverage verification after tests
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80 // Require 80% line coverage
+            }
+        }
+    }
+}
+
+
